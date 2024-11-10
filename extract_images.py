@@ -62,15 +62,17 @@ def main():
     parser.add_argument("-f", "--force", dest="force", action="store_true", help="Overwrite existing image files")
     parser.add_argument("-i", "--in-place", dest="in_place", action="store_true", help="Overwrite source file")
     parser.add_argument("--attachments-dir", dest="attachments", help=f"Path to attachments dir (default: {DEFAULT_ATTACHMENTS_DIR} in vault root)")
-    parser.add_argument("filename", help="Markdown file")
+    parser.add_argument("filename", help="Markdown file", nargs="+")
 
     args = parser.parse_args()
 
-    new_md = extract_all_images(args.filename, force=args.force, attachments_dir=args.attachments)
-    if args.in_place:
-        open(args.filename, "w").write(new_md)
-    else:
-        print(new_md, end="")
+    for file in args.filename:
+        print(f"Opening {file}", file=sys.stderr)
+        new_md = extract_all_images(file, force=args.force, attachments_dir=args.attachments)
+        if args.in_place:
+            open(file, "w").write(new_md)
+        else:
+            print(new_md, end="")
 
 
 if __name__ == "__main__":
