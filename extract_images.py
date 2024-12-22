@@ -20,7 +20,7 @@ def extract_image_from_line(line:str) -> dict:
 def get_attachments_dir(note:pathlib.Path) -> pathlib.Path:
     for d in note.parents:
         if (d / ".obsidian").exists():
-            return d / DEFAULT_ATTACHMENTS_DIR
+            return (d / DEFAULT_ATTACHMENTS_DIR).relative_to(d)
     raise ValueError(f"Can't find obsidian vault root for note {note}")
 
 
